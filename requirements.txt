@@ -1,1 +1,3 @@
 wikipedia
+requests
+sqlite3
