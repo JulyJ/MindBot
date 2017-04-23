@@ -1,3 +1,2 @@
 wikipedia
 requests
-sqlite3
