@@ -1,0 +1,8 @@
+{
+  "name": "MindDumpBot",
+  "description": "Personal Telegram Bot.",
+  "image": "heroku/python",
+  "repository": "https://github.com/JulyJ/MindBot",
+  "keywords": ["python"],
+  "addons": [ "heroku-sqlite" ]
+}
