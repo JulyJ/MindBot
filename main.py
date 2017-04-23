@@ -10,7 +10,8 @@ def main():
         updates = reader.get_updates(last_update_id)
         if len(updates["result"]) > 0:
             last_update_id = reader.get_last_update_id(updates) + 1
-            reader.remember_all(updates)
+            print(updates)
+            reader.parse_message(updates)
         time.sleep(0.5)
 
 if __name__ == '__main__':
