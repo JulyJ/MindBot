@@ -181,7 +181,13 @@ class MsgEcho:
                 print(page.title)
                 self.send_search_message(content, chat)
             except wikipedia.exceptions.PageError:
-                return
+                self.send_search_message("No such page 😭", chat)
+            except wikipedia.exceptions.DisambiguationError:
+                self.send_search_message("Error while processing request 😭", chat)
+            except wikipedia.exceptions.WikipediaException:
+                self.send_search_message("Error while processing request 😭", chat)
+            except wikipedia.exceptions.RedirectError:
+                self.send_search_message("Error while processing request 😭", chat)
 
     def message_type_parser(self, text):
         """This identifies user request (Remember information, Google, Wiki, translate etc."""
