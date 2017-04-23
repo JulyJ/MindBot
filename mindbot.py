@@ -94,10 +94,7 @@ class MsgEcho:
     def send_greetings_message(self, sender, chat_id):
         """This method sends greeting message."""
         print("sending greetings to telegram...")
-        text = "Greetings, {}.\n\nThis is MindDumpBot. He can google something \
-        for you or search in wikipedia. Use 'wiki <text>' or 'google <text>' \
-        commands. Also it can remember all your messages, use #tags! \n\nHave a \
-        nice day!".format(sender)
+        text = "Greetings, {}.\n\nThis is MindDumpBot. He can google something for you or search in wikipedia. Use 'wiki <text>' or 'google <text>' commands. Also it can remember all your messages, use #tags! \n\nHave a nice day!".format(sender)
         print(text)
         text = urllib.parse.quote_plus(text)
         url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
@@ -177,11 +174,14 @@ class MsgEcho:
         """This method performs Wikipedia search."""
         query = text.split(" ", 1)
         if len(query) > 1:
-            page = wikipedia.page(query[1])
-            content = "{} {}".format(page.title, page.url)
-            print("wiki search: ", query[1])
-            print(page.title)
-            self.send_search_message(content, chat)
+            try:
+                page = wikipedia.page(query[1])
+                content = "{} {}".format(page.title, page.url)
+                print("wiki search: ", query[1])
+                print(page.title)
+                self.send_search_message(content, chat)
+            except wikipedia.exceptions.PageError:
+                return
 
     def message_type_parser(self, text):
         """This identifies user request (Remember information, Google, Wiki, translate etc."""
