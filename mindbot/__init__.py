@@ -1,0 +1,1 @@
+from .mindbot import MindBot
