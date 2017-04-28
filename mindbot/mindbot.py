@@ -3,7 +3,7 @@ from operator import itemgetter
 from time import sleep
 
 from .commands import CommandRouter
-from .config import poll_interval, telegram_token
+from .config import poll_interval, TELEGRAM_TOKEN
 from .telegram import TelegramClient
 
 
@@ -11,7 +11,7 @@ class MindBot:
     router = CommandRouter
 
     def __init__(self):
-        self._telegram = TelegramClient(token=telegram_token)
+        self._telegram = TelegramClient(token=TELEGRAM_TOKEN)
         self._last_update_id = None
         self._poll_interval = poll_interval
         self._logger = getLogger(__name__)
@@ -25,6 +25,7 @@ class MindBot:
         self._logger.debug(msg)
         return updates['result']
 
+
     def set_last_update_id(self, updates):
         update_ids = map(itemgetter('update_id'), updates)
         self._last_update_id = max(map(int, update_ids)) + 1
@@ -35,7 +36,8 @@ class MindBot:
             update['message'] for update in updates
             if 'text' in update.get('message', {})
         )
-        map(CommandRouter.route, messages)
+        for message in messages:
+            CommandRouter.route(message)
 
     def run(self):
         self._logger.debug('MindBot started')
@@ -43,6 +45,7 @@ class MindBot:
             while True:
                 updates = self.get_updates()
                 if updates:
+                    self._logger.debug('Update received')
                     self.set_last_update_id(updates)
                     self.route_message(updates)
                 sleep(self._poll_interval)

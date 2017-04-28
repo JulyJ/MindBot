@@ -1,3 +1,4 @@
 *.pyc
 log.txt
 *.db
+env.reg

@@ -4,38 +4,21 @@ from re import compile as re_compile
 from typing import Any, Dict, List
 from urllib.parse import urlencode
 
+from pyowm import OWM, exceptions as owm_exceptions
 from wikipedia import exceptions as wiki_exceptions, page as wiki_page
+import googlemaps
 
-from .config import db_connection_string, telegram_token
+from .config import db_connection_string, TELEGRAM_TOKEN, WEATHER_TOKEN, GOOGLE_MAPS_KEY
 from .db import DataBaseConnection
 from .telegram import TelegramClient
 
 
-class CommandRouter:
-    command_class_mapper = {}
-
-    @classmethod
-    def route(cls, message: Dict[str, Any]):
-        command, _, query = message['text'].partition(' ')
-        command_class = cls.command_class_mapper.get(command, None)
-        command_instance = command_class(query, message)
-        return command_instance()
-
-
-class CommandMeta(type):
-    def __init__(cls, cls_name, bases, attrs):
-        name = attrs.get('name', NotImplemented)
-        if name is not NotImplemented:
-            CommandRouter.command_class_mapper[name] = cls
-        super().__init__(cls_name, bases, attrs)
-
-
-class CommandBase(metaclass=CommandMeta):
+class CommandBase:
     name = NotImplemented
     prefix = ''
 
     def __init__(self, query: str, message: dict):
-        self._telegram = TelegramClient(token=telegram_token)
+        self._telegram = TelegramClient(token=TELEGRAM_TOKEN)
         self._query = query
         self._message = message
         self._logger = getLogger(__name__)
@@ -89,15 +72,42 @@ class GreetingsCommand(CommandBase):
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         text = (
-            'Greetings, {from[first_name]} {from[last_name]}.\n\n'
+            'Greetings, {f[first_name]}  {f[last_name]}.\n\n'
             'This is MindDumpBot. '
             'He can google something for you or search in wikipedia. '
             'Use "wiki <text>" or "google <text>" commands. '
             'Also it can remember all your messages, use #tags! \n\n'
             'Have a nice day!'
-        ).format(f=self._message['from'])
+        ).format(f = self._message['from'])
         self.send_telegram_message(text=text)
 
+class WeatherCommand(CommandBase):
+    name = 'weather'
+    prefix = '🌤  Current weather: \n\n'
+
+    def __call__(self, *args, **kwargs):
+        super().__call__(*args, **kwargs)
+        try:
+            observation = OWM(WEATHER_TOKEN).weather_at_place(self._query)
+        except owm_exceptions.OWMError:
+            self.send_telegram_message('No such location 😭')
+        else:
+            weather = observation.get_weather()
+            city = observation.get_location().get_name()
+            status = weather.get_status()
+            temperature = weather.get_temperature('celsius')
+            wind = weather.get_wind()
+            humidity = weather.get_humidity()
+            pressure = weather.get_pressure()
+            text = (
+                'City: {}\n'
+                'Status: {}\n'
+                'Temperature: {} Celsius\n'
+                'Wind: {} meter/sec\n'
+                'Humidity: {}%\n'
+                'Atmospheric pressure: {} hPa'
+            ).format(city, status, temperature['temp'], wind['speed'], humidity, pressure['press'])
+            return self.send_telegram_message(text=text)
 
 class RememberAll(CommandBase):
     name = None
@@ -131,3 +141,21 @@ class RememberAll(CommandBase):
     def parse_tags(self) -> List[str]:
         tags_finder = re_compile(r'#[^\s]+')
         return tags_finder.findall(self._message['text'])
+
+class CommandRouter:
+    command_class_mapper = {
+        'wiki': WikiCommand,
+        'google': GoogleCommand,
+        '/start': GreetingsCommand,
+        'weather': WeatherCommand,
+         None: RememberAll}
+
+    @classmethod
+    def route(self, message: Dict[str, Any]):
+        command, _, query = message['text'].partition(' ')
+        command = command.lower()
+        if command not in self.command_class_mapper:
+            command = None
+        command_class = self.command_class_mapper.get(command, None)
+        command_instance = command_class(query, message)
+        return command_instance()

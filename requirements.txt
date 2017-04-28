@@ -1,4 +1,6 @@
-wikipedia
+googlemaps
+pyowm
 requests
 SQLAlchemy
 typing
+wikipedia
