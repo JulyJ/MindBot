@@ -6,11 +6,16 @@ from urllib.parse import urlencode
 
 from pyowm import OWM, exceptions as owm_exceptions
 from wikipedia import exceptions as wiki_exceptions, page as wiki_page
-import googlemaps
 
-from .config import db_connection_string, TELEGRAM_TOKEN, WEATHER_TOKEN, GOOGLE_MAPS_KEY
+from .config import db_connection_string, TELEGRAM_TOKEN, WEATHER_TOKEN
+from .texts import HELP_TEXT, WEATHER_TEXT, GREETINGS_TEXT
 from .db import DataBaseConnection
 from .telegram import TelegramClient
+
+
+def parse_tags(text) -> List[str]:
+    tags_finder = re_compile(r'#[^\s]+')
+    return tags_finder.findall(text)
 
 
 class CommandBase:
@@ -40,74 +45,99 @@ class CommandBase:
 class SearchCommand(CommandBase):
     prefix = '😎Found: \n\n'
 
-
 class GoogleCommand(SearchCommand):
-    name = 'google'
+    name = '/google'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
-        query = urlencode({'btnI': 'I', 'q': self._query})
-        url = 'http://www.google.com/search?' + query
-        return self.send_telegram_message(url)
-
+        if self._query:
+            query = urlencode({'btnI': 'I', 'q': self._query})
+            url = 'http://www.google.com/search?' + query
+            return self.send_telegram_message(url)
+        else:
+            return self.send_telegram_message('Please specify query')
 
 class WikiCommand(SearchCommand):
-    name = 'wiki'
+    name = '/wiki'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
-        try:
-            page = wiki_page(self._query)
-        except wiki_exceptions.PageError:
-            self.send_telegram_message('No such page 😭')
-        except wiki_exceptions.WikipediaException:
-            self.send_telegram_message('Error while processing request 😭')
+        if self._query:
+            try:
+                page = wiki_page(self._query)
+            except wiki_exceptions.PageError:
+                self.send_telegram_message('No such page 😭')
+            except wiki_exceptions.WikipediaException:
+                self.send_telegram_message('Error while processing request 😭')
+            else:
+                self.send_telegram_message('{p.title} {p.url}'.format(p=page))
         else:
-            self.send_telegram_message('{p.title} {p.url}'.format(p=page))
-
+            return self.send_telegram_message('Please specify query')
 
 class GreetingsCommand(CommandBase):
     name = '/start'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
-        text = (
-            'Greetings, {f[first_name]}  {f[last_name]}.\n\n'
-            'This is MindDumpBot. '
-            'He can google something for you or search in wikipedia. '
-            'Use "wiki <text>" or "google <text>" commands. '
-            'Also it can remember all your messages, use #tags! \n\n'
-            'Have a nice day!'
-        ).format(f = self._message['from'])
+        text = GREETINGS_TEXT.format(f=self._message['from'])
         self.send_telegram_message(text=text)
 
+
+class HelpCommand(CommandBase):
+    name = '/help'
+
+    def __call__(self, *args, **kwargs):
+        super().__call__(*args, **kwargs)
+        text = HELP_TEXT.format(f=self._message['from'])
+        self.send_telegram_message(text=text)
+
+
 class WeatherCommand(CommandBase):
-    name = 'weather'
+    name = '/weather'
     prefix = '🌤  Current weather: \n\n'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
-        try:
-            observation = OWM(WEATHER_TOKEN).weather_at_place(self._query)
-        except owm_exceptions.OWMError:
-            self.send_telegram_message('No such location 😭')
+        if self._query:
+            try:
+                observation = OWM(WEATHER_TOKEN).weather_at_place(self._query)
+            except owm_exceptions.OWMError:
+                self.send_telegram_message('No such location 😭')
+            else:
+                weather = observation.get_weather()
+                city = observation.get_location().get_name()
+                status = weather.get_status()
+                temperature = weather.get_temperature('celsius')
+                wind = weather.get_wind()
+                humidity = weather.get_humidity()
+                pressure = weather.get_pressure()
+                text = WEATHER_TEXT.format(city, status, temperature['temp'], wind['speed'], humidity, pressure['press'])
+                return self.send_telegram_message(text=text)
         else:
-            weather = observation.get_weather()
-            city = observation.get_location().get_name()
-            status = weather.get_status()
-            temperature = weather.get_temperature('celsius')
-            wind = weather.get_wind()
-            humidity = weather.get_humidity()
-            pressure = weather.get_pressure()
-            text = (
-                'City: {}\n'
-                'Status: {}\n'
-                'Temperature: {} Celsius\n'
-                'Wind: {} meter/sec\n'
-                'Humidity: {}%\n'
-                'Atmospheric pressure: {} hPa'
-            ).format(city, status, temperature['temp'], wind['speed'], humidity, pressure['press'])
-            return self.send_telegram_message(text=text)
+            return self.send_telegram_message('Please pecify location')
+
+class SearchTagCommand(SearchCommand):
+    name = '/search'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._database = DataBaseConnection(db_connection_string)
+
+    def __call__(self, *args, **kwargs):
+        super().__call__(*args, **kwargs)
+        if self._query:
+            tags = parse_tags(self._message['text'])
+            for tag in tags:
+                with self._database as db:
+                    messages = db.search_messages(tag)
+                    if len(messages) > 0:
+                        for message in messages:
+                            self.send_telegram_message(message)
+                    else:
+                        self.send_telegram_message('No records for {}'.format(tag))
+        else:
+            return self.send_telegram_message('Please pecify #tags')
+
 
 class RememberAll(CommandBase):
     name = None
@@ -124,7 +154,7 @@ class RememberAll(CommandBase):
                 text=self._message['text'],
                 date=self.date,
                 sender=self.sender,
-                tags=self.parse_tags(),
+                tags=parse_tags(self._message['text']),
             )
         self.send_telegram_message(self._message['text'])
 
@@ -138,24 +168,25 @@ class RememberAll(CommandBase):
         timestamp = int(self._message['date'])
         return datetime.fromtimestamp(timestamp)
 
-    def parse_tags(self) -> List[str]:
-        tags_finder = re_compile(r'#[^\s]+')
-        return tags_finder.findall(self._message['text'])
 
 class CommandRouter:
     command_class_mapper = {
-        'wiki': WikiCommand,
-        'google': GoogleCommand,
+        '/wiki': WikiCommand,
+        '/google': GoogleCommand,
         '/start': GreetingsCommand,
-        'weather': WeatherCommand,
-         None: RememberAll}
+        '/weather': WeatherCommand,
+        '/help': HelpCommand,
+        '/search': SearchTagCommand,
+        None: RememberAll}
+
 
     @classmethod
-    def route(self, message: Dict[str, Any]):
+    def route(cls, message: Dict[str, Any]):
         command, _, query = message['text'].partition(' ')
         command = command.lower()
-        if command not in self.command_class_mapper:
+        if command not in cls.command_class_mapper:
             command = None
-        command_class = self.command_class_mapper.get(command, None)
+        command_class = cls.command_class_mapper.get(command, None)
         command_instance = command_class(query, message)
         return command_instance()
+

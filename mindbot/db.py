@@ -38,7 +38,6 @@ class Message(Base):
     def __repr__(self):
         return '<Message id={0.id}>'.format(self)
 
-
 class Tag(Base):
     __tablename__ = 'tags'
 
@@ -83,3 +82,15 @@ class DataBaseConnection:
         self._session.add(msg)
         self._session.commit()
         self._logger.debug('Message added to database. {0!r}'.format(msg))
+
+    def search_messages(self, tag):
+        text = []
+        for instance in self._session.query(Tag).filter(Tag.name == tag).all():
+            for message in self._session.query(Message).\
+                    join(association_table).\
+                    filter_by(tag_id=instance.id).\
+                    all():
+                text.append(message.text)
+                self._logger.debug('Messages were found in database.')
+        self._session.commit()
+        return text
