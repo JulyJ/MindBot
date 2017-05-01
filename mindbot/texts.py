@@ -5,11 +5,18 @@ HELP_TEXT = ('Hi, {f[first_name]}  {f[last_name]}.\n'
              '/wiki - Trying to search Wikipedia article for the specified topic.')
 
 WEATHER_TEXT = ('City: {}\n'
-                'Status: {}\n'
-                'Temperature: {} Celsius\n'
-                'Wind: {} meter/sec\n'
-                'Humidity: {}%\n'
-                'Atmospheric pressure: {} hPa')
+                'Status: *{}*\n'
+                'Temperature: *{}* Celsius\n'
+                'Wind: *{} meter/sec*\n'
+                'Humidity: *{}%*\n'
+                'Atmospheric pressure: *{} hPa*')
+
+FORECAST_TEXT = ('*Forecast time: {}*\n\n'
+                 'City: {}\n'
+                 'Status: *{}*\n'
+                 'Day temperature: *{}* Celsius\n'
+                 'Night temperature: *{}* Celsius\n'
+                 'Wind: {} meter/sec')
 
 GREETINGS_TEXT = ('Greetings, {f[first_name]}  {f[last_name]}.\n\n'
                   'This is MindDumpBot. '

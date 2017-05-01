@@ -1,6 +1,6 @@
 from datetime import datetime
 from logging import getLogger
-from re import compile as re_compile
+from re import compile as re_compile, search as re_search
 from typing import Any, Dict, List
 from urllib.parse import urlencode
 
@@ -8,9 +8,10 @@ from pyowm import OWM, exceptions as owm_exceptions
 from wikipedia import exceptions as wiki_exceptions, page as wiki_page
 
 from .config import db_connection_string, TELEGRAM_TOKEN, WEATHER_TOKEN
-from .texts import HELP_TEXT, WEATHER_TEXT, GREETINGS_TEXT
 from .db import DataBaseConnection
+from .exchangerates import OpenExchangeRatesClient
 from .telegram import TelegramClient
+from .texts import HELP_TEXT, WEATHER_TEXT, GREETINGS_TEXT, FORECAST_TEXT
 
 
 def parse_tags(text) -> List[str]:
@@ -21,6 +22,7 @@ def parse_tags(text) -> List[str]:
 class CommandBase:
     name = NotImplemented
     prefix = ''
+    disable_web_page_preview = 'true'
 
     def __init__(self, query: str, message: dict):
         self._telegram = TelegramClient(token=TELEGRAM_TOKEN)
@@ -38,15 +40,50 @@ class CommandBase:
             get_params={
                 'text': '{0.prefix}{text}'.format(self, text=text),
                 'chat_id': self._message['chat']['id'],
+                'parse_mode': 'Markdown',
+                'disable_web_page_preview': self.disable_web_page_preview
             }
         )
 
 
 class SearchCommand(CommandBase):
-    prefix = '😎Found: \n\n'
+    prefix = '*😎Found:* \n\n'
+
+class CalculateCommand(CommandBase):
+    prefix = '*⚙ Calculated:* \n\n'
+
+class ExchangeCommand(CalculateCommand):
+    name = '/exchange'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._exchange = OpenExchangeRatesClient()
+
+    def __call__(self, *args, **kwargs):
+        super().__call__(*args, **kwargs)
+        if self.currency_parser(self._query):
+            params = self._query.split(' ')
+            rate = self._exchange.get_rate(params[1], params[2])
+            if rate is not None:
+                return self.send_telegram_message("*{}* {} = *{}* {}".format(
+                    params[0],
+                    params[1],
+                    round(rate*int(params[0]), 2),
+                    params[2]
+                ))
+            else:
+                return self.send_telegram_message('Please specify existing currency')
+        else:
+                return self.send_telegram_message('Please specify query in ```/exchange <amount> <base currency> <target currency>``` format')
+
+    def currency_parser(self, text) -> List[str]:
+        return re_search(r'([0-9]+)\s([a-zA-Z]{3})\s([a-zA-Z]{3})', text)
+
+
 
 class GoogleCommand(SearchCommand):
     name = '/google'
+    disable_web_page_preview = 'false'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
@@ -70,7 +107,8 @@ class WikiCommand(SearchCommand):
             except wiki_exceptions.WikipediaException:
                 self.send_telegram_message('Error while processing request 😭')
             else:
-                self.send_telegram_message('{p.title} {p.url}'.format(p=page))
+                content = page.content[:512]
+                self.send_telegram_message('*{p.title}* \n\n{}...\n\n[Read more at Wikipedia]({p.url})'.format(content, p=page))
         else:
             return self.send_telegram_message('Please specify query')
 
@@ -92,9 +130,34 @@ class HelpCommand(CommandBase):
         self.send_telegram_message(text=text)
 
 
+class ForecastCommand(CommandBase):
+    name = '/forecast'
+    prefix = '🌤  *3-days forecast:* \n'
+
+    def __call__(self, *args, **kwargs):
+        super().__call__(*args, **kwargs)
+        if self._query:
+            try:
+                forecast = OWM(WEATHER_TOKEN).daily_forecast(self._query, limit=3)
+            except owm_exceptions.OWMError:
+                self.send_telegram_message('No such location 😭')
+            else:
+                weathers = forecast.get_forecast()
+                for weather in weathers.get_weathers():
+                    city = weathers.get_location().get_name()
+                    date = weather.get_reference_time('iso')
+                    status = weather.get_status()
+                    temperature = weather.get_temperature('celsius')
+                    wind = weather.get_wind()
+                    text = FORECAST_TEXT.format(date, city, status, temperature['day'], temperature['night'], wind['speed'])
+                    self.send_telegram_message(text=text)
+        else:
+            return self.send_telegram_message('Please pecify location')
+
+
 class WeatherCommand(CommandBase):
     name = '/weather'
-    prefix = '🌤  Current weather: \n\n'
+    prefix = '🌤  *Current weather:* \n\n'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
@@ -141,7 +204,7 @@ class SearchTagCommand(SearchCommand):
 
 class RememberAll(CommandBase):
     name = None
-    prefix = '😎Remebered: \n\n'
+    prefix = '*😎Remebered:* \n\n'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -171,12 +234,14 @@ class RememberAll(CommandBase):
 
 class CommandRouter:
     command_class_mapper = {
-        '/wiki': WikiCommand,
+        '/exchange': ExchangeCommand,
+        '/forecast': ForecastCommand,
         '/google': GoogleCommand,
-        '/start': GreetingsCommand,
-        '/weather': WeatherCommand,
         '/help': HelpCommand,
         '/search': SearchTagCommand,
+        '/start': GreetingsCommand,
+        '/weather': WeatherCommand,
+        '/wiki': WikiCommand,
         None: RememberAll}
 
 

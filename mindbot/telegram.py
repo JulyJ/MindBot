@@ -18,9 +18,9 @@ class TelegramClient:
             base=self.base_url,
             method=url_name,
             question='?' if get_params else '',
-            query=urlencode(get_params),
+            query=urlencode(get_params)
         )
-        # self._logger.debug('Telegram API requested {url}'.format(url=url))
+        self._logger.debug('Telegram API requested {url}'.format(url=url))
         return http_get(url)
 
     def get_text(self, url_name: str, get_params: dict=None):
