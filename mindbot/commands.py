@@ -74,7 +74,7 @@ class ExchangeCommand(CalculateCommand):
             else:
                 return self.send_telegram_message('Please specify existing currency')
         else:
-                return self.send_telegram_message('Please specify query in ```/exchange <amount> <base currency> <target currency>``` format')
+                return self.send_telegram_message('Please specify query as ```<amount> <base currency> <target currency>```')
 
     def currency_parser(self, text) -> List[str]:
         return re_search(r'([0-9]+)\s([a-zA-Z]{3})\s([a-zA-Z]{3})', text)
@@ -157,7 +157,35 @@ class ForecastCommand(CommandBase):
 
 class WeatherCommand(CommandBase):
     name = '/weather'
-    prefix = '🌤  *Current weather:* \n\n'
+    owm_emoji_map = {
+        '01d': '☀️',
+        '01n': '☀️',
+        '02d': '🌤',
+        '02n': '🌤',
+        '03d': '⛅️',
+        '03n': '⛅️',
+        '04d': '🌥',
+        '04n': '🌥',
+        '09d': '🌧',
+        '09n': '🌧',
+        '10d': '🌦',
+        '10n': '🌦',
+        '11d': '⛈',
+        '11n': '⛈',
+        '13d': '🌨',
+        '13n': '🌨',
+        '50d': '🌫',
+        '50n': '🌫'
+    }
+    prefix = 'Current weather: \n\n'
+
+    def get_emoji(self, weather):
+        iconId = weather.get_weather_icon_name()
+        if (self.owm_emoji_map[iconId]):
+            return self.owm_emoji_map[iconId]
+
+        return ''
+    prefix = ' *Current weather:* \n\n'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
@@ -175,6 +203,7 @@ class WeatherCommand(CommandBase):
                 humidity = weather.get_humidity()
                 pressure = weather.get_pressure()
                 text = WEATHER_TEXT.format(city, status, temperature['temp'], wind['speed'], humidity, pressure['press'])
+                self.prefix = self.get_emoji(weather) + ' ' + self.prefix
                 return self.send_telegram_message(text=text)
         else:
             return self.send_telegram_message('Please pecify location')
