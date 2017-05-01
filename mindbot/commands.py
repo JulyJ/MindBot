@@ -68,7 +68,7 @@ class ExchangeCommand(CalculateCommand):
                 return self.send_telegram_message("*{}* {} = *{}* {}".format(
                     params[0],
                     params[1],
-                    round(rate*int(params[0]), 2),
+                    round(rate*float(params[0]), 2),
                     params[2]
                 ))
             else:
