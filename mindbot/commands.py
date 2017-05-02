@@ -217,18 +217,19 @@ class SearchTagCommand(SearchCommand):
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
-        if self._query:
-            tags = parse_tags(self._message['text'])
-            for tag in tags:
-                with self._database as db:
-                    messages = db.search_messages(tag)
-                    if len(messages) > 0:
-                        for message in messages:
-                            self.send_telegram_message(message)
-                    else:
-                        self.send_telegram_message('No records for {}'.format(tag))
-        else:
+        if not self._query:
             return self.send_telegram_message('Please pecify #tags')
+        tags = parse_tags(self._message['text'])
+        if not tags:
+            return self.send_telegram_message('Please pecify #tags')
+        with self._database as db:
+            for tag in tags:
+                messages = db.search_messages(tag)
+                if not messages:
+                    self.send_telegram_message('No records for {}'.format(tag))
+                    continue
+                for message in messages:
+                    self.send_telegram_message(message)
 
 
 class RememberAll(CommandBase):

@@ -84,13 +84,9 @@ class DataBaseConnection:
         self._logger.debug('Message added to database. {0!r}'.format(msg))
 
     def search_messages(self, tag):
-        text = []
-        for instance in self._session.query(Tag).filter(Tag.name == tag).all():
-            for message in self._session.query(Message).\
-                    join(association_table).\
-                    filter_by(tag_id=instance.id).\
-                    all():
-                text.append(message.text)
-                self._logger.debug('Messages were found in database.')
-        self._session.commit()
-        return text
+        tag_instance = self._session.query(Tag).filter(Tag.name == tag).first()
+        if tag_instance is None:
+            return []
+        else:
+            text = [msg.text for msg in tag_instance.messages]
+            return text
