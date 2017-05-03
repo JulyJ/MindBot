@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 
 from requests import Response, get as http_get
 
-from .config import exchangesrates_url
+from ..config import exchangesrates_url
 
 
 class OpenExchangeRatesClient:

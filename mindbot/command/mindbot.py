@@ -2,7 +2,7 @@ from logging import getLogger
 from operator import itemgetter
 from time import sleep
 
-from .commands import CommandRouter
+from ..router import CommandRouter
 from .config import poll_interval, TELEGRAM_TOKEN
 from .telegram import TelegramClient
 

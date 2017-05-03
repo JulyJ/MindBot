@@ -1,1 +1,1 @@
-from .mindbot import MindBot
+from .command.mindbot import MindBot
