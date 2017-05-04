@@ -3,6 +3,7 @@ from typing import Any, Dict
 from .command.help.commands import GreetingsCommand, HelpCommand
 from .command.search.google import GoogleCommand
 from .command.search.wiki import WikiCommand
+from .command.search.urban import UrbanDictionaryCommand
 from .command.weather.weather import WeatherCommand
 from .command.weather.forecast import ForecastCommand
 from .command.exchange.exchange import ExchangeCommand
@@ -17,6 +18,7 @@ class CommandRouter:
         '/help': HelpCommand,
         '/search': SearchTagCommand,
         '/start': GreetingsCommand,
+        '/urban': UrbanDictionaryCommand,
         '/weather': WeatherCommand,
         '/wiki': WikiCommand,
         None: RememberAll}
