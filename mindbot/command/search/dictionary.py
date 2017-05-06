@@ -15,7 +15,7 @@ class DictionaryCommand(SearchCommand):
             json = self.get_json(self._query)
             if json:
                 definitions = self.get_definitions(json)
-                for definition in definitions:
+                for definition in definitions:                                       
                     self.send_telegram_message('*Definition:* {}\n'.format(definition))
             else:
                 self.send_telegram_message('No definitions were found')
@@ -42,29 +42,42 @@ class DictionaryCommand(SearchCommand):
         definitions = []
         senses = self.get_senses(json)
         for sense in senses:
-            definitions.append(sense['definitions'])
+            print(sense)
+            if 'definitions' in sense:
+                definitions.append(sense['definitions'])
+            else:
+                continue
         return definitions
 
-    def get_senses(self, definitions):
+    def get_senses(self, json):
         senses = []
-        entries = self.get_entries(definitions)
+        entries = self.get_entries(json)
         for entry in entries:
-            for sense in entry['senses']:
-                senses.append(sense)
+            if 'senses' in entry:
+                for sense in entry['senses']:
+                    senses.append(sense)
+            else:
+                continue
         return senses
 
-    def get_entries(self, senses):
+    def get_entries(self, json):
         entries = []
-        lexical_entries = self.get_lexical_entries(senses)
+        lexical_entries = self.get_lexical_entries(json)
         for lexical_entry in lexical_entries:
-            for entry in lexical_entry['entries']:
-                entries.append(entry)
+            if 'entries' in lexical_entry:
+                for entry in lexical_entry['entries']:
+                    entries.append(entry)
+            else:
+                continue
         return entries
 
-    def get_lexical_entries(self, entries):
+    def get_lexical_entries(self, json):
         lexical_entries = []
-        results = entries['results']
+        results = json['results']
         for result in results:
-            for lexical_entry in result['lexicalEntries']:
-                lexical_entries.append(lexical_entry)
+            if 'lexicalEntries' in result:
+                for lexical_entry in result['lexicalEntries']:
+                    lexical_entries.append(lexical_entry)
+            else:
+                continue
         return lexical_entries
