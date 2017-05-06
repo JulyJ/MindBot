@@ -4,6 +4,7 @@ from .command.help.commands import GreetingsCommand, HelpCommand
 from .command.search.google import GoogleCommand
 from .command.search.wiki import WikiCommand
 from .command.search.urban import UrbanDictionaryCommand
+from .command.search.dictionary import DictionaryCommand
 from .command.weather.weather import WeatherCommand
 from .command.weather.forecast import ForecastCommand
 from .command.exchange.exchange import ExchangeCommand
@@ -12,6 +13,7 @@ from .command.remember.searchtag import SearchTagCommand
 
 class CommandRouter:
     command_class_mapper = {
+        '/oxford': DictionaryCommand,
         '/exchange': ExchangeCommand,
         '/forecast': ForecastCommand,
         '/google': GoogleCommand,
