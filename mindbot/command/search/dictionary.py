@@ -15,7 +15,7 @@ class DictionaryCommand(SearchCommand):
             json = self.get_json(self._query)
             if json:
                 definitions = self.get_definitions(json)
-                for definition in definitions:                                       
+                for definition in definitions:
                     self.send_telegram_message('*Definition:* {}\n'.format(definition))
             else:
                 self.send_telegram_message('No definitions were found')
@@ -28,8 +28,7 @@ class DictionaryCommand(SearchCommand):
         url = '{base}{language}/{query}'.format(
             base=urban_url,
             query=self._query.lower(),
-            language='en'
-        )
+            language='en')
         self._logger.debug('Oxford Dictionary API requested {url}'.format(url=url))
         response = get(url, headers={'app_id': DICTIONARY_APP_ID,
                                      'app_key': DICTIONARY_APP_KEY})

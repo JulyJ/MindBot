@@ -39,6 +39,7 @@ class MindBot:
         for message in messages:
             CommandRouter.route(message)
 
+
     def run(self):
         self._logger.debug('MindBot started')
         try:

@@ -10,6 +10,7 @@ from .command.weather.forecast import ForecastCommand
 from .command.exchange.exchange import ExchangeCommand
 from .command.remember.rememberall import RememberAll
 from .command.remember.searchtag import SearchTagCommand
+from .command.comics.xkcd import XkcdCommand
 
 class CommandRouter:
     command_class_mapper = {
@@ -23,7 +24,8 @@ class CommandRouter:
         '/urban': UrbanDictionaryCommand,
         '/weather': WeatherCommand,
         '/wiki': WikiCommand,
-        None: RememberAll}
+        '/xkcd': XkcdCommand,
+        '/remember': RememberAll}
 
 
     @classmethod
@@ -31,7 +33,7 @@ class CommandRouter:
         command, _, query = message['text'].partition(' ')
         command = command.lower()
         if command not in cls.command_class_mapper:
-            command = None
+            return
         command_class = cls.command_class_mapper.get(command, None)
         command_instance = command_class(query, message)
         return command_instance()

@@ -6,7 +6,7 @@ from .db import DataBaseConnection
 from .parser import parse_tags
 
 class RememberAll(CommandBase):
-    name = None
+    name = '/remember'
     prefix = '*😎Remebered:* \n\n'
 
     def __init__(self, *args, **kwargs):
