@@ -1,17 +1,18 @@
 from ..commandbase import CommandBase
 
-HELP_TEXT = ('Hi, {f[first_name]}  {f[last_name]}.\n'
-             '/help - Show this message.\n'
-             '/exchange <AMOUNT> <BASE CURRENCY> <TARGET CURRENCY> - Money exchange.'
+HELP_TEXT = ('Hi, {f[first_name]}  {f[last_name]}.\n\n'
+             '`/help - Show this message.\n'
+             '/exchange <AMOUNT> <BASE CURRENCY> <TARGET CURRENCY> - Money exchange.\n'
              '/google <QUERY> - Trying to perform "feeling lucky" google search.\n'
              '/forecast <LOCATION>- Show 3 days weather forecast in the specified location.\n'
              '/weather <LOCATION>- Show current weather in the specified location.\n'
-             '/wiki <QUERY> - Trying to search Wikipedia article for the specified topic.'
-             '/urban <QUERY> - Looking for definitions in Urban Dictionary.'
-             '/xkcd or /xkcd <number> - Latest or specific xkcd comics.'
-             '/oxford <QUERY> - Looking for definitions in Oxford Dictionary.'
-             '/search <#TAG> - Searching database for messages with tags.'
-             '/remember <text> <#TAG> - Write this message to the database.'
+             '/wiki <QUERY> - Trying to search Wikipedia article for the specified topic.\n'
+             '/urban <QUERY> - Looking for definitions in Urban Dictionary.\n'
+             '/xkcd or /xkcd <number> - Latest or specific xkcd comics.\n'
+             '/oxford <QUERY> - Looking for definitions in Oxford Dictionary.\n'
+             '/qr <QUERY> - Generate QR code.\n'
+             '/search <#TAG> - Searching database for messages with tags.\n'
+             '/remember <text> <#TAG> - Write this message to the database.`'
             )
 
 GREETINGS_TEXT = ('Greetings, {f[first_name]}  {f[last_name]}.\n\n'

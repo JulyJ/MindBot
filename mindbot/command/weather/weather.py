@@ -37,9 +37,9 @@ class WeatherCommand(CommandBase):
     prefix = 'Current weather: \n\n'
 
     def get_emoji(self, weather):
-        iconId = weather.get_weather_icon_name()
-        if (self.owm_emoji_map[iconId]):
-            return self.owm_emoji_map[iconId]
+        icon_id = weather.get_weather_icon_name()
+        if self.owm_emoji_map[icon_id]:
+            return self.owm_emoji_map[icon_id]
 
         return ''
     prefix = ' *Current weather:* \n\n'

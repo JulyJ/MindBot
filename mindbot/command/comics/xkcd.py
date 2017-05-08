@@ -13,7 +13,6 @@ class XkcdCommand(CommandBase):
         super().__call__(*args, **kwargs)
         if self._query:
             json = self.get_json(self._query)
-            print(json)
         else:
             json = self.get_latest_json()
         if json:

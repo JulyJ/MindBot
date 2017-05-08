@@ -11,6 +11,7 @@ from .command.exchange.exchange import ExchangeCommand
 from .command.remember.rememberall import RememberAll
 from .command.remember.searchtag import SearchTagCommand
 from .command.comics.xkcd import XkcdCommand
+from .command.tools.qrgenerator import QrCommand
 
 class CommandRouter:
     command_class_mapper = {
@@ -23,6 +24,7 @@ class CommandRouter:
         '/start': GreetingsCommand,
         '/urban': UrbanDictionaryCommand,
         '/weather': WeatherCommand,
+        '/qr': QrCommand,
         '/wiki': WikiCommand,
         '/xkcd': XkcdCommand,
         '/remember': RememberAll}
