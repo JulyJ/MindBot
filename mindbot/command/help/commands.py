@@ -1,9 +1,12 @@
 from ..commandbase import CommandBase
 
 HELP_TEXT = ('Hi, {f[first_name]}  {f[last_name]}.\n\n'
-             '`/help - Show this message.\n'
+             '`/help - Shows this message.\n'
              '/exchange <AMOUNT> <BASE CURRENCY> <TARGET CURRENCY> - Money exchange.\n'
              '/google <QUERY> - Trying to perform "feeling lucky" google search.\n'
+             '/latestnews <N> - Gets N latest Hacker News stories.\n'
+             '/topnews <N> - Gets N top Hacker News stories.\n'
+             '/bestnews <N> - Gets N best Hacker News stories.\n'
              '/forecast <LOCATION>- Show 3 days weather forecast in the specified location.\n'
              '/weather <LOCATION>- Show current weather in the specified location.\n'
              '/wiki <QUERY> - Trying to search Wikipedia article for the specified topic.\n'

@@ -12,6 +12,7 @@ from .command.remember.rememberall import RememberAll
 from .command.remember.searchtag import SearchTagCommand
 from .command.comics.xkcd import XkcdCommand
 from .command.tools.qrgenerator import QrCommand
+from .command.hacker_news.hackernews import LatestNewsCommand, TopNewsCommand, BestNewsCommand
 
 class CommandRouter:
     command_class_mapper = {
@@ -27,8 +28,10 @@ class CommandRouter:
         '/qr': QrCommand,
         '/wiki': WikiCommand,
         '/xkcd': XkcdCommand,
+        '/latestnews': LatestNewsCommand,
+        '/topnews': TopNewsCommand,
+        '/bestnews': BestNewsCommand,
         '/remember': RememberAll}
-
 
     @classmethod
     def route(cls, message: Dict[str, Any]):
