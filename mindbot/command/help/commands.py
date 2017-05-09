@@ -14,6 +14,7 @@ HELP_TEXT = ('Hi, {f[first_name]}  {f[last_name]}.\n\n'
              '/xkcd or /xkcd <number> - Latest or specific xkcd comics.\n'
              '/oxford <QUERY> - Looking for definitions in Oxford Dictionary.\n'
              '/qr <QUERY> - Generate QR code.\n'
+             '/ocr <LINK TO IMAGE> - Parses text from image.\n'
              '/search <#TAG> - Searching database for messages with tags.\n'
              '/remember <text> <#TAG> - Write this message to the database.`'
             )

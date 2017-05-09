@@ -23,9 +23,8 @@ class NewsCommand(CommandBase):
 
     def news_iterator(self, news_ids, text):
         for news_id in news_ids:
-            if news_id:
-                item = self._client.get_item(news_id)
-                text = self.concatenate(text, item)
+            item = self._client.get_item(news_id)
+            text = self.concatenate(text, item)
         return text
 
 class LatestNewsCommand(NewsCommand):

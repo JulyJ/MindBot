@@ -12,6 +12,7 @@ from .command.remember.rememberall import RememberAll
 from .command.remember.searchtag import SearchTagCommand
 from .command.comics.xkcd import XkcdCommand
 from .command.tools.qrgenerator import QrCommand
+from .command.tools.ocr import OcrCommand
 from .command.hacker_news.hackernews import LatestNewsCommand, TopNewsCommand, BestNewsCommand
 
 class CommandRouter:
@@ -26,6 +27,7 @@ class CommandRouter:
         '/urban': UrbanDictionaryCommand,
         '/weather': WeatherCommand,
         '/qr': QrCommand,
+        '/ocr': OcrCommand,
         '/wiki': WikiCommand,
         '/xkcd': XkcdCommand,
         '/latestnews': LatestNewsCommand,
@@ -42,4 +44,3 @@ class CommandRouter:
         command_class = cls.command_class_mapper.get(command, None)
         command_instance = command_class(query, message)
         return command_instance()
-
