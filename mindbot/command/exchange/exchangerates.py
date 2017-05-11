@@ -20,5 +20,8 @@ class OpenExchangeRatesClient:
         return http_get(url).json()
 
     def get_rate(self, basecurrency, targetcurrency):
-        rates = self.get_json(basecurrency)['rates']
-        return rates.get(targetcurrency)
+        rates = self.get_json(basecurrency)
+        if 'error' in rates:
+            return None
+        else:
+            return rates['rates'].get(targetcurrency)

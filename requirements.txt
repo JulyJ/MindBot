@@ -1,4 +1,3 @@
-googlemaps
 pyowm
 requests
 SQLAlchemy

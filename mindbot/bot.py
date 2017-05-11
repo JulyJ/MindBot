@@ -16,7 +16,7 @@ class MindBot:
         self._poll_interval = poll_interval
         self._logger = getLogger(__name__)
 
-    def get_updates(self):
+    def get_updates(self) -> object:
         updates = self._telegram.get_json(
             url_name='getUpdates',
             get_params={'offset': self._last_update_id},

@@ -9,7 +9,7 @@ class XkcdCommand(CommandBase):
     disable_web_page_preview = 'false'
     XKCD_TEXT = ('[{response[num]}]({response[img]})\n'
                  '*{response[safe_title]}*\n'
-                 '{response[alt}')
+                 '{response[alt]}')
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)

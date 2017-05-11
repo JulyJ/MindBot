@@ -13,7 +13,7 @@ class NewsCommand(CommandBase):
         if self._query.isdigit():
             self._quantity = int(self._query)
         else:
-            self._quantity = 5
+            self._quantity = 10
 
     @staticmethod
     def _get_latest_items(request_type):
@@ -33,7 +33,7 @@ class NewsCommand(CommandBase):
 
     def make_text(self, news_ids, text):
         items = map(self._get_item, news_ids)
-        return text + ''.join(NEWS_TEXT.format(item) for item in items)
+        return text + ''.join(NEWS_TEXT.format(item=item) for item in items)
 
 
 class LatestNewsCommand(NewsCommand):

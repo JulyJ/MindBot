@@ -41,7 +41,7 @@ class CommandRouter:
     def route(cls, message: Dict[str, Any]):
         command, _, query = message['text'].partition(' ')
         command = command.lower()
-        if command not in cls.command_class_mapper:
+        if command not in dict(cls.command_class_mapper):
             return
         command_class = dict(cls.command_class_mapper).get(command, None)
         command_instance = command_class(cls, query, message)
