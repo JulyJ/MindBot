@@ -1,18 +1,17 @@
 from requests import get
-import json
-from urllib.parse import urlencode
 
+from mindbot.config import DICTIONARY_APP_ID, DICTIONARY_APP_KEY
 from ..commandbase import SearchCommand
-from ..config import DICTIONARY_APP_KEY, DICTIONARY_APP_ID
 
 
 class DictionaryCommand(SearchCommand):
     name = '/oxford'
+    help_text = '<QUERY> - Looking for definitions in Oxford Dictionary.'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         if self._query:
-            json = self.get_json(self._query)
+            json = self.get_json()
             if json:
                 definitions = self.get_definitions(json)
                 for definition in definitions:
@@ -22,7 +21,7 @@ class DictionaryCommand(SearchCommand):
         else:
             self.send_telegram_message('Please specify query')
 
-    def get_json(self, query):
+    def get_json(self):
         urban_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'
 
         url = '{base}{language}/{query}'.format(

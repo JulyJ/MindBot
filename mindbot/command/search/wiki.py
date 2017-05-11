@@ -5,6 +5,7 @@ from ..commandbase import SearchCommand
 
 class WikiCommand(SearchCommand):
     name = '/wiki'
+    help_text = '<QUERY> - Trying to search Wikipedia article for the specified topic.'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
@@ -17,6 +18,7 @@ class WikiCommand(SearchCommand):
                 self.send_telegram_message('Error while processing request 😭')
             else:
                 content = page.content[:512]
-                self.send_telegram_message('*{p.title}* \n\n{}...\n\n[Read more at Wikipedia]({p.url})'.format(content, p=page))
+                msg = '*{p.title}* \n\n{content}...\n\n[Read more at Wikipedia]({p.url})'
+                self.send_telegram_message(msg.format(content=content, p=page))
         else:
             return self.send_telegram_message('Please specify query')

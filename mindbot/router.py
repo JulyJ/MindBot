@@ -15,25 +15,27 @@ from .command.tools.qrgenerator import QrCommand
 from .command.tools.ocr import OcrCommand
 from .command.hacker_news.hackernews import LatestNewsCommand, TopNewsCommand, BestNewsCommand
 
+
 class CommandRouter:
-    command_class_mapper = {
-        '/oxford': DictionaryCommand,
-        '/exchange': ExchangeCommand,
-        '/forecast': ForecastCommand,
-        '/google': GoogleCommand,
-        '/help': HelpCommand,
-        '/search': SearchTagCommand,
-        '/start': GreetingsCommand,
-        '/urban': UrbanDictionaryCommand,
-        '/weather': WeatherCommand,
-        '/qr': QrCommand,
-        '/ocr': OcrCommand,
-        '/wiki': WikiCommand,
-        '/xkcd': XkcdCommand,
-        '/latestnews': LatestNewsCommand,
-        '/topnews': TopNewsCommand,
-        '/bestnews': BestNewsCommand,
-        '/remember': RememberAll}
+    command_class_mapper = (
+        ('/help', HelpCommand),
+        ('/start', GreetingsCommand),
+        ('/oxford', DictionaryCommand),
+        ('/exchange', ExchangeCommand),
+        ('/forecast', ForecastCommand),
+        ('/google', GoogleCommand),
+        ('/search', SearchTagCommand),
+        ('/urban', UrbanDictionaryCommand),
+        ('/weather', WeatherCommand),
+        ('/qr', QrCommand),
+        ('/ocr', OcrCommand),
+        ('/wiki', WikiCommand),
+        ('/xkcd', XkcdCommand),
+        ('/latestnews', LatestNewsCommand),
+        ('/topnews', TopNewsCommand),
+        ('/bestnews', BestNewsCommand),
+        ('/remember', RememberAll),
+    )
 
     @classmethod
     def route(cls, message: Dict[str, Any]):
@@ -41,6 +43,14 @@ class CommandRouter:
         command = command.lower()
         if command not in cls.command_class_mapper:
             return
-        command_class = cls.command_class_mapper.get(command, None)
-        command_instance = command_class(query, message)
+        command_class = dict(cls.command_class_mapper).get(command, None)
+        command_instance = command_class(cls, query, message)
         return command_instance()
+
+    @classmethod
+    def get_commands_help(cls):
+        return (
+            (command, command_class.help_text)
+            for command, command_class in cls.command_class_mapper
+            if command_class.help_text is not None
+        )

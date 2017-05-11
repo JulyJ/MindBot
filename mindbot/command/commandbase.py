@@ -1,16 +1,17 @@
 from logging import getLogger
-from urllib.parse import urlencode
 
-from .config import TELEGRAM_TOKEN
-from .telegram import TelegramClient
+from mindbot.config import TELEGRAM_TOKEN
+from mindbot.telegram import TelegramClient
 
 
 class CommandBase:
     name = NotImplemented
+    help_text = NotImplemented
     prefix = ''
     disable_web_page_preview = 'true'
 
-    def __init__(self, query: str, message: dict):
+    def __init__(self, router, query: str, message: dict):
+        self._router = router
         self._telegram = TelegramClient(token=TELEGRAM_TOKEN)
         self._query = query
         self._message = message
@@ -34,6 +35,7 @@ class CommandBase:
 
 class SearchCommand(CommandBase):
     prefix = '*😎Found:* \n\n'
+
 
 class CalculateCommand(CommandBase):
     prefix = '*⚙ Calculated:* \n\n'

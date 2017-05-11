@@ -1,1 +1,1 @@
-from .command.mindbot import MindBot
+VERSION = (0, 0, 1)

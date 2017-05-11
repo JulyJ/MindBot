@@ -2,8 +2,10 @@ from urllib.parse import urlencode
 
 from ..commandbase import SearchCommand
 
+
 class GoogleCommand(SearchCommand):
     name = '/google'
+    help_text = '<QUERY> - Trying to perform "feeling lucky" google search.'
     disable_web_page_preview = 'false'
 
     def __call__(self, *args, **kwargs):

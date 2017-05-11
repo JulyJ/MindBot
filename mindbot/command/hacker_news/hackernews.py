@@ -1,59 +1,72 @@
 from requests import get
 
-from .hackernewsclient import HackerNewsClient
 from ..commandbase import CommandBase
 
-NEWS_TEXT = ('📄 *{}* [Read more...]({}) Score: *{}*\n')
+
+NEWS_TEXT = '📄 *{item[title]}* [Read more...]({item[url]}) Score: *{item[score]}*\n'
+
 
 class NewsCommand(CommandBase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._client = HackerNewsClient()
-        if self._client.is_number(self._query):
+        if self._query.isdigit():
             self._quantity = int(self._query)
         else:
             self._quantity = 5
 
-    def concatenate(self, text, item):
-        text += NEWS_TEXT.format(item['title'],
-                                 item['url'],
-                                 item['score'])
-        return text
+    @staticmethod
+    def _get_latest_items(request_type):
+        url = 'https://hacker-news.firebaseio.com/v0/{}'.format(request_type)
+        response = get(url)
+        return response.json()
 
-    def news_iterator(self, news_ids, text):
-        for news_id in news_ids:
-            item = self._client.get_item(news_id)
-            text = self.concatenate(text, item)
-        return text
+    @staticmethod
+    def _get_item(item_id):
+        url = 'https://hacker-news.firebaseio.com/v0/item/{}.json'.format(item_id)
+        response = get(url).json()
+        return {
+            'title': response.get('title'),
+            'url': response.get('url'),
+            'score': response.get('score'),
+        }
+
+    def make_text(self, news_ids, text):
+        items = map(self._get_item, news_ids)
+        return text + ''.join(NEWS_TEXT.format(item) for item in items)
+
 
 class LatestNewsCommand(NewsCommand):
     name = '/latestnews'
+    help_text = '<N> - Gets N latest Hacker News stories.'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         text = 'Latest {} Hacker News stories: \n\n'.format(self._quantity)
-        news_ids = self._client.get_latest_items('newstories.json')[:self._quantity]
-        text = self.news_iterator(news_ids, text)
+        news_ids = self._get_latest_items('newstories.json')[:self._quantity]
+        text = self.make_text(news_ids, text)
         self.send_telegram_message(text)
 
 
 class TopNewsCommand(NewsCommand):
     name = '/topnews'
+    help_text = '<N> - Gets N top Hacker News stories.'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         text = 'Top {} Hacker News stories: \n\n'.format(self._quantity)
-        news_ids = self._client.get_latest_items('topstories.json')[:self._quantity]
-        text = self.news_iterator(news_ids, text)
+        news_ids = self._get_latest_items('topstories.json')[:self._quantity]
+        text = self.make_text(news_ids, text)
         self.send_telegram_message(text)
+
 
 class BestNewsCommand(NewsCommand):
     name = '/bestnews'
+    help_text = '<N> - Gets N best Hacker News stories.'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         text = 'Best {} Hacker News stories: \n\n'.format(self._quantity)
-        news_ids = self._client.get_latest_items('beststories.json')[:self._quantity]
-        text = self.news_iterator(news_ids, text)
+        news_ids = self._get_latest_items('beststories.json')[:self._quantity]
+        text = self.make_text(news_ids, text)
         self.send_telegram_message(text)
