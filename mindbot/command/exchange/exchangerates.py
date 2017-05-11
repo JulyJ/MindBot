@@ -1,9 +1,9 @@
 from logging import getLogger
 from urllib.parse import urlencode
 
-from requests import Response, get as http_get
+from requests import get as http_get
 
-from ..config import exchangesrates_url
+from mindbot.config import exchangesrates_url
 
 
 class OpenExchangeRatesClient:
@@ -21,7 +21,4 @@ class OpenExchangeRatesClient:
 
     def get_rate(self, basecurrency, targetcurrency):
         rates = self.get_json(basecurrency)['rates']
-        if targetcurrency in rates:
-            return rates[targetcurrency]
-        else:
-            return None
+        return rates.get(targetcurrency)

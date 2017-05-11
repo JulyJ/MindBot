@@ -1,10 +1,12 @@
-from ..commandbase import SearchCommand
-from ..config import db_connection_string
+from mindbot.config import db_connection_string
 from .db import DataBaseConnection
 from .parser import parse_tags
+from ..commandbase import SearchCommand
+
 
 class SearchTagCommand(SearchCommand):
     name = '/search'
+    help_text = '<#TAG> - Searching database for messages with tags.'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

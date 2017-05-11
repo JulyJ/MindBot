@@ -1,11 +1,12 @@
 from re import search as re_search
-from typing import List
 
 from ..commandbase import CalculateCommand
 from .exchangerates import OpenExchangeRatesClient
 
+
 class ExchangeCommand(CalculateCommand):
     name = '/exchange'
+    help_text = '<AMOUNT> <BASE CURRENCY> <TARGET CURRENCY> - Money exchange.'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,7 +27,9 @@ class ExchangeCommand(CalculateCommand):
             else:
                 return self.send_telegram_message('Please specify existing currency')
         else:
-                return self.send_telegram_message('Please specify query as ```<amount> <base currency> <target currency>```')
+            msg = 'Please specify query as ```<amount> <base currency> <target currency>```'
+            return self.send_telegram_message(msg)
 
-    def currency_parser(self, text) -> List[str]:
+    @staticmethod
+    def currency_parser(text):
         return re_search(r'([0-9]+)\s([a-zA-Z]{3})\s([a-zA-Z]{3})', text)

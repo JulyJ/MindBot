@@ -1,43 +1,44 @@
-from requests import post
-from urllib.parse import urlencode
-from validators import url
+from typing import Tuple, Union
 
+from requests import post
+from validators import url as valid_url
+
+from mindbot.config import OCR_API_KEY
 from ..commandbase import CommandBase
-from ..config import OCR_API_KEY
+
 
 class OcrCommand(CommandBase):
     name = '/ocr'
+    help_text = '<LINK TO IMAGE> - Parses text from image.'
     prefix = '🔍  *Text Parser:* \n'
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
-        if url(self._query):
-            json = self.ocr_space_url(url=self._query)
-            exit_code, error_message, text = self.parse_response(json)
+        if valid_url(self._query):
+            exit_code, error_message, text = self.parse_response()
             if exit_code == 1:
                 self.send_telegram_message('`{}`'.format(text))
             else:
-                self.send_telegram_message('*❗️ Error Message*: {}'.format(str(error_message)))
+                self.send_telegram_message('*❗️ Error Message*: {e!s}'.format(e=error_message))
         else:
             self.send_telegram_message('No valid url provided.')
 
-    def ocr_space_url(self, url, overlay=False, api_key=OCR_API_KEY, language='eng'):
-        payload = {'url': url,
-                   'isOverlayRequired': overlay,
-                   'apikey': api_key,
-                   'language': language,
-                  }
-        response = post('https://api.ocr.space/parse/image',
-                        data=payload,
-                       )
+    def ocr_space_url(self):
+        payload = {
+            'url': self._query,
+            'isOverlayRequired': False,
+            'apikey': OCR_API_KEY,
+            'language': 'eng',
+        }
+        response = post('https://api.ocr.space/parse/image', data=payload)
         return response.json()
 
-    def parse_response(self, json):
-        print(json)
-        text = ""
+    def parse_response(self) -> Tuple[int, str, Union[str, None]]:
+        json = self.ocr_space_url()
         exit_code = json['OCRExitCode']
         error_message = json['ErrorMessage']
         if exit_code == 1:
-            for result in json['ParsedResults']:
-                text += (result['ParsedText'])
+            text = ''.join(result['ParsedText'] for result in json['ParsedResults'])
+        else:
+            text = None
         return exit_code, error_message, text

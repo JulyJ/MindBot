@@ -1,3 +1,7 @@
+.idea
+.cache
+.tox
+*.egg-info
 *.pyc
 log.txt
 *.db

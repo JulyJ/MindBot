@@ -15,6 +15,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 
+
 Base = declarative_base()
 
 
@@ -37,6 +38,7 @@ class Message(Base):
 
     def __repr__(self):
         return '<Message id={0.id}>'.format(self)
+
 
 class Tag(Base):
     __tablename__ = 'tags'

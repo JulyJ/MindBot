@@ -1,10 +1,10 @@
-from logging import getLogger
+from logging import getLogger, basicConfig, DEBUG
 from operator import itemgetter
 from time import sleep
 
-from ..router import CommandRouter
-from .config import poll_interval, TELEGRAM_TOKEN
-from .telegram import TelegramClient
+from mindbot.config import TELEGRAM_TOKEN, poll_interval
+from mindbot.telegram import TelegramClient
+from mindbot.router import CommandRouter
 
 
 class MindBot:
@@ -25,7 +25,6 @@ class MindBot:
         self._logger.debug(msg)
         return updates['result']
 
-
     def set_last_update_id(self, updates):
         update_ids = map(itemgetter('update_id'), updates)
         self._last_update_id = max(map(int, update_ids)) + 1
@@ -38,7 +37,6 @@ class MindBot:
         )
         for message in messages:
             CommandRouter.route(message)
-
 
     def run(self):
         self._logger.debug('MindBot started')
@@ -54,6 +52,18 @@ class MindBot:
             return
 
 
-if __name__ == '__main__':
+def run():
+    basicConfig(
+        format='%(levelname)s %(asctime)-15s %(message)s',
+        level=DEBUG,
+    )
+
+    mindbot = MindBot()
+    mindbot.run()
+
     mind_bot = MindBot()
     mind_bot.run()
+
+
+if __name__ == '__main__':
+    run()

@@ -1,12 +1,14 @@
 from datetime import datetime
 
-from ..commandbase import CommandBase
-from ..config import db_connection_string
+from mindbot.config import db_connection_string
 from .db import DataBaseConnection
 from .parser import parse_tags
+from ..commandbase import CommandBase
+
 
 class RememberAll(CommandBase):
     name = '/remember'
+    help_text = '<text> <#TAG> - Write this message to the database.'
     prefix = '*😎Remebered:* \n\n'
 
     def __init__(self, *args, **kwargs):
