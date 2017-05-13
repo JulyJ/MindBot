@@ -2,7 +2,7 @@ from ..commandbase import CommandBase
 
 
 GREETINGS_TEXT = (
-    'Greetings, {f[first_name]}  {f[last_name]}.\n\n'
+    'Greetings, {f[first_name]}.\n\n'
     'This is MindDumpBot. '
     'He can google something for you or search in wikipedia. '
     'Use "/help" command to see all functions.\n\n'
@@ -30,7 +30,7 @@ class HelpCommand(CommandBase):
             command=command,
             help_text=help_text,
         ) for command, help_text in self._router.get_commands_help())
-        text = 'Hi, {f[first_name]} {f[last_name]}.\n\n{commands_help}'.format(
+        text = 'Hi, {f[first_name]}.\n\n{commands_help}'.format(
             f=self._message['from'],
             commands_help='\n'.join(commands_help)
         )

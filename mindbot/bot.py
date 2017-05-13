@@ -61,9 +61,6 @@ def run():
     mindbot = MindBot()
     mindbot.run()
 
-    mind_bot = MindBot()
-    mind_bot.run()
-
 
 if __name__ == '__main__':
     run()
