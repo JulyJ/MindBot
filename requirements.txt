@@ -4,3 +4,4 @@ SQLAlchemy
 typing
 wikipedia
 validators
+pytest
