@@ -1,11 +1,13 @@
-from wikipedia import exceptions as wiki_exceptions, page as wiki_page
+from wikipedia import exceptions as wiki_exceptions, page as wiki_page, random as wiki_random
 
 from ..commandbase import SearchCommand
 
 
-class WikiCommand(SearchCommand):
-    name = '/wiki'
-    help_text = '<QUERY> - Trying to search Wikipedia article for the specified topic.'
+class WikiSearch(SearchCommand):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.name == '/random':
+            self._query = wiki_random()
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
@@ -22,3 +24,13 @@ class WikiCommand(SearchCommand):
                 self.send_telegram_message(msg.format(content=content, p=page))
         else:
             return self.send_telegram_message('Please specify query')
+
+
+class WikiCommand(WikiSearch):
+    name = '/wiki'
+    help_text = '<QUERY> - Trying to search Wikipedia article for the specified topic.'
+
+
+class RandomCommand(WikiSearch):
+    name = '/random'
+    help_text = ' - Gets a random Wikipedia article.'

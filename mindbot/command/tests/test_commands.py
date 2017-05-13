@@ -1,4 +1,5 @@
 import pytest
+from time import time
 
 from mindbot.router import CommandRouter
 
@@ -13,7 +14,7 @@ def get_commands():
 @pytest.fixture()
 def fake_user():
     return {
-        "id": 123,
+        "id": 175113727,
         "first_name": "FirstName",
         "last_name": "LastName",
         "username": "UserName"
@@ -21,12 +22,12 @@ def fake_user():
 
 
 @pytest.fixture()
-def fake_chat():
+def test_chat():
     return {
-        "id": 123,
-        "first_name": "FirstName",
-        "last_name": "LastName",
-        "username": "UserName",
+        "id": 175113727,
+        "first_name": "Julia",
+        "last_name": "K",
+        "username": "JulikSp",
         "type": "private"
         }
 
@@ -45,8 +46,8 @@ def fake_empty_command_message(request):
     return {
         "message_id": 1486,
         "from": fake_user(),
-        "chat": fake_chat(),
-        "date": 1494692389,
+        "chat": test_chat(),
+        "date": time(),
         "text": request.param,
         "entities": fake_entities()
         }
@@ -57,8 +58,8 @@ def fake_text_command_message(request):
     return {
         "message_id": 1486,
         "from": fake_user(),
-        "chat": fake_chat(),
-        "date": 1494692389,
+        "chat": test_chat(),
+        "date": time(),
         "text": request.param+" horse",
         "entities": fake_entities()
         }
