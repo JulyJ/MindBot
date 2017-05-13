@@ -28,7 +28,7 @@ class RememberAll(CommandBase):
 
     @property
     def sender(self):
-        return '{0[first_name]} {0[last_name]}'.format(self._message['from'])
+        return '{0[first_name]}'.format(self._message['from'])
 
     @property
     def date(self) -> datetime:
