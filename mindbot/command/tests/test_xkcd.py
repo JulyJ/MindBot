@@ -1,9 +1,11 @@
 from ..comics.xkcd import XkcdCommand
 from mindbot.router import CommandRouter
 
+
 def test_empty():
     command = XkcdCommand(CommandRouter, '', {})
     assert command.get_json()
+
 
 def test_numeric():
     command = XkcdCommand(CommandRouter, '123', {})
