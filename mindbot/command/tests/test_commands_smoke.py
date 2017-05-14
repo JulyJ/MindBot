@@ -53,21 +53,5 @@ def fake_empty_command_message(request):
         }
 
 
-@pytest.fixture(params=get_commands())
-def fake_text_command_message(request):
-    return {
-        "message_id": 1486,
-        "from": fake_user(),
-        "chat": test_chat(),
-        "date": time(),
-        "text": request.param+" horse",
-        "entities": fake_entities()
-        }
-
-
 def test_empty_commands(fake_empty_command_message):
     CommandRouter.route(fake_empty_command_message)
-
-
-def test_text_commands(fake_text_command_message):
-    CommandRouter.route(fake_text_command_message)

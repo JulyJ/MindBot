@@ -4,6 +4,11 @@ from ..commandbase import CommandBase
 
 
 NEWS_TEXT = '📄 *{item[title]}* [Read more...]({item[url]}) Score: *{item[score]}*\n'
+EMPTY_NEWS = {
+             'title': None,
+             'url': None,
+             'score': None,
+             }
 
 
 class NewsCommand(CommandBase):
@@ -25,11 +30,14 @@ class NewsCommand(CommandBase):
     def _get_item(item_id):
         url = 'https://hacker-news.firebaseio.com/v0/item/{}.json'.format(item_id)
         response = get(url).json()
-        return {
-            'title': response.get('title'),
-            'url': response.get('url'),
-            'score': response.get('score'),
-        }
+        try:
+            return {
+                'title': response.get('title'),
+                'url': response.get('url'),
+                'score': response.get('score'),
+            }
+        except AttributeError:
+            return EMPTY_NEWS
 
     def make_text(self, news_ids, text):
         items = map(self._get_item, news_ids)
