@@ -1,5 +1,6 @@
 .idea
 .cache
+.coverage
 .tox
 *.egg-info
 *.pyc
