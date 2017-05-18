@@ -1,7 +1,7 @@
 import pytest
 import json
 import requests_mock
-from unittest.mock import Mock
+from unittest.mock import MagicMock
 
 from mindbot.bot import MindBot
 from mindbot.router import CommandRouter
@@ -11,7 +11,6 @@ from mindbot.config import TELEGRAM_TOKEN
 bot = MindBot()
 router = CommandRouter()
 client = TelegramClient(TELEGRAM_TOKEN)
-mock = Mock()
 
 
 @pytest.fixture()
@@ -71,7 +70,7 @@ def get_commands():
     return commands_list
 
 
-@pytest.fixture()
+@pytest.fixture(params=get_commands())
 def fake_commands_message(request):
     return [{
         "update_id": 547461412,
@@ -94,11 +93,11 @@ def fake_updates():
     }
 
 
-@pytest.fixture(params=get_commands())
-def fake_command_updates(request):
+@pytest.fixture()
+def fake_command_updates():
     return {
         "ok": "true",
-        "result": fake_commands_message(request)
+        "result": fake_commands_message()
     }
 
 
@@ -132,9 +131,7 @@ def test_set_last_update_id():
         assert bot._last_update_id == 547461412 + 1
 
 
-def test_route_message(fake_command_updates):
-    mock.route()
-    with requests_mock.mock() as m:
-        m.get(requests_mock.ANY, text='ok')
-        bot.route_message([fake_command_updates])
-        assert mock.route.called
+def test_route_message(fake_commands_message):
+    CommandRouter.route = MagicMock()
+    bot.route_message(fake_commands_message)
+    CommandRouter.route.assert_called_with(fake_commands_message[0]['message'])
