@@ -4,5 +4,5 @@ SQLAlchemy
 typing
 wikipedia
 validators
-requests-mock
+requests_mock
 pytest
