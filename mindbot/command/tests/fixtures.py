@@ -97,3 +97,13 @@ def fake_empty_updates():
         "ok": "true",
         "result": []
     }
+
+
+@pytest.fixture()
+def fake_xkcd():
+    return {
+        "num": 1839,
+        "safe_title": "Doctor Visit",
+        "alt": "According to these blood tests, you're like 30% cereal.",
+        "img": "https://imgs.xkcd.com/comics/doctor_visit.png",
+    }
