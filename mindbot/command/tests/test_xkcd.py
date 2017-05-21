@@ -1,4 +1,5 @@
 from json import dumps
+from requests import ConnectionError
 import requests_mock
 from unittest.mock import MagicMock, Mock
 
@@ -22,7 +23,13 @@ def test_json_with_query():
         assert xkcd_query.get_json() == fake_xkcd()
 
 
-def test_json_status_code_not_ok():
+def test_get_json_connection_error():
+    with requests_mock.mock() as m:
+        m.get(requests_mock.ANY, exc=ConnectionError)
+        assert not xkcd.get_json()
+
+
+def test_get_json_status_code_not_ok():
     with requests_mock.mock() as m:
         m.get(requests_mock.ANY, text='Not found', status_code=404)
         assert not xkcd.get_json()

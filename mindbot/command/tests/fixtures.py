@@ -107,3 +107,44 @@ def fake_xkcd():
         "alt": "According to these blood tests, you're like 30% cereal.",
         "img": "https://imgs.xkcd.com/comics/doctor_visit.png",
     }
+
+
+@pytest.fixture()
+def fake_urban():
+    return {
+        "list": [{
+            "definition": "Heroin.",
+            "permalink": "http://horse.urbanup.com/183954",
+            "thumbs_up": 1764,
+            "thumbs_down": 693
+        }]}
+
+
+@pytest.fixture()
+def fake_empty_urban():
+    return {
+        "list": []}
+
+
+@pytest.fixture()
+def fake_hknews_list():
+    return [14386413]
+
+
+@pytest.fixture()
+def fake_hknews_item():
+    return {
+        "score": 2,
+        "title": "Ask HN: How to find audience for FOSS project?",
+        "url": "http://some.url.com"
+    }
+
+
+@pytest.fixture()
+def fake_exchange():
+    return {
+        "base": "CAD",
+        "rates": {
+            "EUR": 0.65924
+        }
+    }

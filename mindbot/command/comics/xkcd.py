@@ -1,4 +1,4 @@
-from requests import get, status_codes
+from requests import get, status_codes, RequestException
 
 from ..commandbase import CommandBase
 
@@ -24,6 +24,10 @@ class XkcdCommand(CommandBase):
             url = 'http://xkcd.com/{}/info.0.json'.format(self._query)
         else:
             url = 'https://xkcd.com/info.0.json'
-        response = get(url)
+        try:
+            response = get(url)
+        except RequestException as e:
+            self._logger.debug('RequestException {}'.format(e))
+            return
         if response.status_code == status_codes.codes.ok:
             return response.json()

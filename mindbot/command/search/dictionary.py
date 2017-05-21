@@ -40,7 +40,6 @@ class DictionaryCommand(SearchCommand):
         definitions = []
         senses = self.get_senses(json)
         for sense in senses:
-            print(sense)
             if 'definitions' in sense:
                 definitions.append(sense['definitions'])
             else:

@@ -1,5 +1,5 @@
 import json
-from requests import get
+from requests import get, status_codes, RequestException
 from urllib.parse import urlencode
 
 from ..commandbase import SearchCommand
@@ -18,22 +18,26 @@ class UrbanDictionaryCommand(SearchCommand):
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         if self._query:
-            definitions = self.get_definition(self._query)['list']
-            print(definitions)
-            if not definitions:
+            defs = self.get_definition()
+            if not defs:
                 return self.send_telegram_message('No definitions were found')
-            for definition in definitions:
-                self.send_telegram_message(self.URBAN_TEXT.format(definition=definition))
+            else:
+                [self.send_telegram_message(self.URBAN_TEXT.format(definition=d)) for d in defs]
         else:
             return self.send_telegram_message('Please specify query')
 
-    def get_definition(self, query):
+    def get_definition(self):
         urban_url = 'http://api.urbandictionary.com/v0/define?'
 
         url = '{base}{query}'.format(
             base=urban_url,
-            query=urlencode({'term': query})
+            query=urlencode({'term': self._query})
         )
         self._logger.debug('Urban Dictionary API requested {url}'.format(url=url))
-        response = get(url).content.decode()
-        return json.loads(response)
+        try:
+            response = get(url)
+        except RequestException as e:
+            self._logger.debug('RequestException {}'.format(e))
+            return
+        if response.status_code == status_codes.codes.ok:
+            return json.loads(response.content.decode())['list']
