@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 from .command.help.commands import GreetingsCommand, HelpCommand
 from .command.nasa.apod import APODCommand
+from .command.nasa.curiosity import CuriosityCommand
 from .command.search.google import GoogleCommand
 from .command.search.wiki import WikiCommand, RandomCommand
 from .command.search.urban import UrbanDictionaryCommand
@@ -28,6 +29,7 @@ class CommandRouter:
         ('/search', SearchTagCommand),
         ('/urban', UrbanDictionaryCommand),
         ('/weather', WeatherCommand),
+        ('/curiosity', CuriosityCommand),
         ('/qr', QrCommand),
         ('/ocr', OcrCommand),
         ('/apod', APODCommand),
