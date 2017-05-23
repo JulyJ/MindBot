@@ -1,4 +1,4 @@
-from requests import get
+from requests import get, status_codes
 
 from mindbot.config import DICTIONARY_APP_ID, DICTIONARY_APP_KEY
 from ..commandbase import SearchCommand
@@ -23,7 +23,6 @@ class DictionaryCommand(SearchCommand):
 
     def get_json(self):
         urban_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'
-
         url = '{base}{language}/{query}'.format(
             base=urban_url,
             query=self._query.lower(),
@@ -31,17 +30,15 @@ class DictionaryCommand(SearchCommand):
         self._logger.debug('Oxford Dictionary API requested {url}'.format(url=url))
         response = get(url, headers={'app_id': DICTIONARY_APP_ID,
                                      'app_key': DICTIONARY_APP_KEY})
-        if response:
+        if response.status_code == status_codes.codes.ok:
             return response.json()
-        else:
-            return None
 
     def get_definitions(self, json):
         definitions = []
         senses = self.get_senses(json)
         for sense in senses:
             if 'definitions' in sense:
-                definitions.append(sense['definitions'])
+                definitions.extend(sense['definitions'])
             else:
                 continue
         return definitions

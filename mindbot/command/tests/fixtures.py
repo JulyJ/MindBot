@@ -148,3 +148,66 @@ def fake_exchange():
             "EUR": 0.65924
         }
     }
+
+
+@pytest.fixture()
+def fake_dict():
+    return {
+        "results": [{
+            "id": "string",
+            "language": "string",
+            "lexicalEntries": [{
+                "entries": [{
+                    "senses": [{
+                        "definitions": ["definition"]
+                        }]
+                    }]
+                }]
+            }]
+        }
+
+
+@pytest.fixture()
+def fake_empty_results():
+    return {
+        "results": []
+        }
+
+
+@pytest.fixture()
+def fake_empty_lexical_entries():
+    return {
+        "results": [{
+            "id": "string",
+            "language": "string",
+            "lexicalEntries": []
+                }]
+        }
+
+
+@pytest.fixture()
+def fake_empty_entries():
+    return {
+        "results": [{
+            "id": "string",
+            "language": "string",
+            "lexicalEntries": [{
+                "entries": []
+                }]
+            }]
+        }
+
+
+@pytest.fixture()
+def fake_empty_senses():
+    return {
+        "results": [{
+            "id": "string",
+            "language": "string",
+            "lexicalEntries": [{
+                "entries": [{
+                    "senses": []
+                    }]
+                }]
+            }]
+        }
