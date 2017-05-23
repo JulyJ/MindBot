@@ -1,9 +1,9 @@
-pyowm
-requests
 SQLAlchemy
-typing
-wikipedia
-validators
-radar
-requests_mock
+pyowm
 pytest
+radar
+requests
+requests_mock
+typing
+validators
+wikipedia

@@ -2,6 +2,7 @@ from typing import Any, Dict
 
 from .command.help.commands import GreetingsCommand, HelpCommand
 from .command.nasa.apod import APODCommand
+from .command.nasa.asteroid import AsteroidCommand
 from .command.nasa.curiosity import CuriosityCommand
 from .command.search.google import GoogleCommand
 from .command.search.wiki import WikiCommand, RandomCommand
@@ -21,6 +22,7 @@ from .command.hacker_news.hackernews import LatestNewsCommand, TopNewsCommand, B
 class CommandRouter:
     command_class_mapper = (
         ('/help', HelpCommand),
+        ('/asteroid', AsteroidCommand),
         ('/start', GreetingsCommand),
         ('/oxford', DictionaryCommand),
         ('/exchange', ExchangeCommand),
