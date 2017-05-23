@@ -21,7 +21,7 @@ class CuriosityCommand(CommandBase):
         if self._query.isdigit():
             self._quantity = int(self._query)
         else:
-            self._quantity = 10
+            self._quantity = 3
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
