@@ -8,13 +8,13 @@ from ..commandbase import CommandBase
 
 class AsteroidCommand(CommandBase):
     name = '/asteroids'
-    help_text = " - Retrieve a list of 3 Asteroids based on today closest approach to Earth."
+    help_text = " - Retrieve a list of 5 Asteroids based on today closest approach to Earth."
     today = strftime("%Y-%m-%d", gmtime())
     ASTEROID_TEXT = (
         'Name: [{object[name]}]({object[nasa_jpl_url]})\n'
         'Absolute Magnitude: {object[absolute_magnitude_h]}\n'
-        'Minimum Estimated Diameter: {object[estimated_diameter][kilometers][estimated_diameter_min]}\n'
-        'Maximum Estimated Diameter: {object[estimated_diameter][kilometers][estimated_diameter_max]}\n'
+        'Minimum Diameter: {object[estimated_diameter][kilometers][estimated_diameter_min]}\n'
+        'Maximum Diameter: {object[estimated_diameter][kilometers][estimated_diameter_max]}\n'
         'Hazardous? {object[is_potentially_hazardous_asteroid]}\n'
         )
 
