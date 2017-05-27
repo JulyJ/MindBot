@@ -1,3 +1,10 @@
+"""
+    User can save any message to database. Better use #tags to search them later.
+
+    Example:
+        /remember Luck Is What Happens When Preparation Meets Opportunity #Seneca #luck
+"""
+
 from datetime import datetime
 
 from mindbot.config import db_connection_string

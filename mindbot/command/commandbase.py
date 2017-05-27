@@ -1,3 +1,11 @@
+"""
+    Module provide parent classes for received commands.
+
+    CommandBase is core method that sets variables parsed from message and
+    prepares template telegram message for response. Supplementary classes
+    inherited from CommandBase class add some command-specific response prefixes.
+"""
+
 from logging import getLogger
 
 from mindbot.config import TELEGRAM_TOKEN

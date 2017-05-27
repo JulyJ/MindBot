@@ -1,3 +1,7 @@
+"""
+    Please, do not forget to export required environment variables before running MindBot.
+"""
+
 import os
 
 TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')

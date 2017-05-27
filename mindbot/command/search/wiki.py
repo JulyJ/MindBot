@@ -1,3 +1,18 @@
+"""
+    This module serve commands to MediaWiki API.
+
+    Powered by https://pypi.python.org/pypi/wikipedia/ it provides user
+    with Wikipedia article search. WikiSearch class can perform Wikipedia
+    search by specified query or return random Wikipedia article.
+
+    Available commands:
+        - /wiki
+        - /random
+
+    Example:
+        /wiki parrot
+"""
+
 from wikipedia import exceptions as wiki_exceptions, page as wiki_page, random as wiki_random
 
 from ..commandbase import SearchCommand

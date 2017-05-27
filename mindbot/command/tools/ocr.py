@@ -1,3 +1,16 @@
+"""
+    This module parses text from images provided by URL.
+
+    Powered by https://ocr.space/ this module provides user with
+    text parsed from an image. The Image should be provided as URL in command
+    message query.
+
+    OCR_API_KEY is required fo this module. It is free after registration.
+
+    Example:
+        /ocr http://fabricjs.com/article_assets/2_7.png
+"""
+
 from typing import Tuple, Union
 
 from requests import post

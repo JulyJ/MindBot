@@ -1,3 +1,11 @@
+"""
+    This module runs Mindbot and provides core bot methods.
+
+    MindBot class includes basic methods to receive updates from telegram API
+    using long polling and set updates offset to avoid duplicated messages. Moreover,
+    it executes command class based on command provided in received message.
+"""
+
 from logging import getLogger, basicConfig, DEBUG
 from operator import itemgetter
 from time import sleep

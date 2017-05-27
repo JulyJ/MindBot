@@ -1,3 +1,11 @@
+"""
+    Module designed to route messages based on strategy pattern.
+
+    This module includes class mapper tuple to correlate received from telegram
+    user command with target command class to run. Additionally, this module
+    generates help message based on command list.
+"""
+
 from typing import Any, Dict
 
 from .command.help.commands import GreetingsCommand, HelpCommand

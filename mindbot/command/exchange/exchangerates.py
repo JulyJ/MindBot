@@ -1,3 +1,9 @@
+"""
+    This module provide methods to exchange rates for specified currency.
+
+    Powered by http://fixer.io/.
+"""
+
 from logging import getLogger
 from urllib.parse import urlencode
 
@@ -16,7 +22,7 @@ class OpenExchangeRatesClient:
             question='?',
             query=urlencode({'base': basecurrency})
         )
-        self._logger.debug('OpenExchangeRates API requested {url}'.format(url=url))
+        self._logger.debug('ExchangeRates API requested {url}'.format(url=url))
         return http_get(url).json()
 
     def get_rate(self, basecurrency, targetcurrency):

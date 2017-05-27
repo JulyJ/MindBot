@@ -1,3 +1,13 @@
+"""
+    Simple QR generator, based on Google QR generator.
+
+    This command class sends user URL that generates QR code. QR code  as image will be
+    visible to the user by standard telegram web page preview.
+
+    Example:
+        /qr https://www.python.org/
+"""
+
 from urllib.parse import urlencode
 
 from ..commandbase import CommandBase

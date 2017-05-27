@@ -1,3 +1,14 @@
+"""
+    Telegram communication module.
+
+    This module provides the class for forming and sending requests to telegram bot API
+    based on target request type and parameters given.
+
+    Examples:
+        https://api.telegram.org/bot{TOKEN}/sendMessage?text=Hello%2C+World
+        https://api.telegram.org/bot{TOKEN}/getUpdates
+"""
+
 from logging import getLogger
 from urllib.parse import urlencode
 

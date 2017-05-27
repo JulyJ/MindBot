@@ -1,3 +1,18 @@
+"""
+    This module serves commands to Hacker News API.
+
+    More information about API can be found here https://github.com/HackerNews/API.
+    Module provide responses for 3 commands available to user:
+        - /latestnews
+        - /topnews
+        - /bestnews
+    Bot will retrieve list of news and then send specified amount of title, links
+    and rating to user, default amount of news items is 10.
+
+    Example:
+        /latestnews 10
+"""
+
 from requests import get
 
 from ..commandbase import CommandBase

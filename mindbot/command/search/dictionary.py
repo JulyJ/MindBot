@@ -1,3 +1,16 @@
+"""
+    This module serves commands to Oxford Dictionary API.
+
+    Oxford dictionary API documentation is available at official website
+    https://developer.oxforddictionaries.com/. This module provides a user
+    with Oxford Dictionary definition search and returns all definitions available.
+
+    Registration for getting free API keys is required.
+
+    Example:
+        /oxford parrot
+"""
+
 from requests import get, status_codes
 
 from mindbot.config import DICTIONARY_APP_ID, DICTIONARY_APP_KEY

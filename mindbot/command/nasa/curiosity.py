@@ -1,3 +1,18 @@
+"""
+    This module provides methods to send user photos form Curiosity rover.
+
+    Powered by https://api.nasa.gov/
+
+    User can specify number of photos he would like to receive, 3 by default.
+    Date of photos is generated randomly starting from Curiosity landing in 2012
+    and ending with current date.
+
+    API KEY is required. It is free after registration.
+
+    Example:
+        /curiosity 10
+"""
+
 from radar import random_datetime
 from requests import get, status_codes, RequestException
 from time import gmtime, strftime

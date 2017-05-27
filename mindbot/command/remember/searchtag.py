@@ -1,3 +1,10 @@
+"""
+    User can search previously saved messages with #tags in database.
+
+    Example:
+        /search #luck
+"""
+
 from mindbot.config import db_connection_string
 from .db import DataBaseConnection
 from .parser import parse_tags

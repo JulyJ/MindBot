@@ -1,3 +1,13 @@
+"""
+    This module exchange one currency to another.
+
+    By calling /exchage command with specially formed query user will receive
+    responce with converted amount.
+
+    Example:
+        /exchange 10 RUB EUR
+"""
+
 from re import search as re_search
 
 from ..commandbase import CalculateCommand

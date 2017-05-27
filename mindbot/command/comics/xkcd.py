@@ -1,3 +1,12 @@
+"""
+    Get latest or specific XKCD comics strip.
+
+    Official website: https://xkcd.com/
+
+    Example:
+        /xkcd 123
+"""
+
 from requests import get, status_codes, RequestException
 
 from ..commandbase import CommandBase

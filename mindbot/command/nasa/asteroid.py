@@ -1,3 +1,13 @@
+"""
+    This module provides methods to send user information about closest o Earth asteroids.
+
+    Powered by https://api.nasa.gov/
+    User will receive information about 5 closest to Earth asteroids for the current day
+    as well as links for this objects for further reading.
+
+    API KEY is required. It is free after registration.
+"""
+
 from requests import get, status_codes, RequestException
 from time import gmtime, strftime
 from urllib.parse import urlencode

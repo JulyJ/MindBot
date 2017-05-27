@@ -1,3 +1,14 @@
+"""
+    This module serves commands to Urban Dictionary API.
+
+    Urban dictionary API is not officially announced, but valid
+    and working fine. This module provides a user with Urban Dictionary
+    definition search and returns all definitions and their ratings.
+
+    Example:
+        /urban parrot
+"""
+
 import json
 from requests import get, status_codes, RequestException
 from urllib.parse import urlencode

@@ -1,3 +1,10 @@
+"""
+    This module implements google search for user by query.
+
+    Example:
+        /google parrot
+"""
+
 from urllib.parse import urlencode
 
 from ..commandbase import SearchCommand

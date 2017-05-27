@@ -1,3 +1,10 @@
+"""
+    This module implements database communication using SQL Alchemy.
+
+    Main purpose of database is to store user messages with #tags and to search
+    all messages marked with #tag.
+"""
+
 from datetime import datetime
 from logging import getLogger
 from typing import List

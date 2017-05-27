@@ -1,3 +1,11 @@
+"""
+    This module provides a response for technical commands.
+
+    First message bot will receive from a new user is /start to receive greetings.
+    The second will probably be /help to retrieve the list of available bot commands.
+"""
+
+
 from ..commandbase import CommandBase
 
 

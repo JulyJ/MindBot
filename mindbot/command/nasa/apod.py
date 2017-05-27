@@ -1,3 +1,14 @@
+"""
+    This module provides methods to send user "A picture of the day".
+
+    Powered by https://api.nasa.gov/
+    Picture of the day will be send to user with standard telegram web page preview
+    as well as picture description.
+
+    API KEY is required. It is free after registration.
+"""
+
+
 from requests import get, status_codes, RequestException
 from urllib.parse import urlencode
 
