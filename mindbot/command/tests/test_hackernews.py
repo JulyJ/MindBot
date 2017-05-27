@@ -2,8 +2,8 @@ from json import dumps
 import requests_mock
 from unittest.mock import MagicMock
 
-from mindbot.command.hacker_news.hackernews import (LatestNewsCommand, BestNewsCommand,
-                                                    TopNewsCommand, NewsCommand, NEWS_TEXT)
+from mindbot.command.news.hackernews import (LatestNewsCommand, BestNewsCommand,
+                                             TopNewsCommand, NewsCommand, NEWS_TEXT)
 from mindbot.router import CommandRouter
 from .fixtures import fake_hknews_list, fake_hknews_item
 

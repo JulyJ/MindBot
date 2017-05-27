@@ -24,7 +24,8 @@ from .command.remember.searchtag import SearchTagCommand
 from .command.comics.xkcd import XkcdCommand
 from .command.tools.qrgenerator import QrCommand
 from .command.tools.ocr import OcrCommand
-from .command.hacker_news.hackernews import LatestNewsCommand, TopNewsCommand, BestNewsCommand
+from .command.news.hackernews import LatestNewsCommand, TopNewsCommand, BestNewsCommand
+from .command.news.canadanews import CanadaStatsCommand
 
 
 class CommandRouter:
@@ -32,6 +33,7 @@ class CommandRouter:
         ('/help', HelpCommand),
         ('/asteroid', AsteroidCommand),
         ('/start', GreetingsCommand),
+        ('/canadastat', CanadaStatsCommand),
         ('/oxford', DictionaryCommand),
         ('/exchange', ExchangeCommand),
         ('/forecast', ForecastCommand),
