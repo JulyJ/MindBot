@@ -46,7 +46,7 @@ class OcrCommand(CommandBase):
         response = post('https://api.ocr.space/parse/image', data=payload)
         return response.json()
 
-    def parse_response(self) -> Tuple[int, str, Union[str, None]]:
+    def parse_response(self):
         json = self.ocr_space_url()
         exit_code = json['OCRExitCode']
         error_message = json['ErrorMessage']

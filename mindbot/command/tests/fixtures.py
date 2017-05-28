@@ -211,3 +211,36 @@ def fake_empty_senses():
                 }]
             }]
         }
+
+
+@pytest.fixture()
+def fake_ocr_response():
+    return {
+        "ParsedResults": [
+                {
+                    "FileParseExitCode": 1,
+                    "ParsedText": "This is a sample parsed result",
+                    "ErrorMessage": "null",
+                    "ErrorDetails": "null"
+                }
+            ],
+        "OCRExitCode": 1,
+        "ErrorMessage": "null",
+        "ErrorDetails": "null"
+    }
+
+
+def fake_ocr_error_response():
+    return {
+        "ParsedResults": [
+                {
+                    "FileParseExitCode": 1,
+                    "ParsedText": "This is a sample parsed result",
+                    "ErrorMessage": "null",
+                    "ErrorDetails": "null"
+                }
+            ],
+        "OCRExitCode": 2,
+        "ErrorMessage": "null",
+        "ErrorDetails": "null"
+    }
