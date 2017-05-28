@@ -18,8 +18,10 @@ class GoogleCommand(SearchCommand):
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         if self._query:
-            query = urlencode({'btnI': 'I', 'q': self._query})
-            url = 'http://www.google.com/search?' + query
+            url = 'http://www.google.com/search?{query}'.format(
+                query=urlencode({'btnI': 'I',
+                                 'q': self._query})
+            )
             return self.send_telegram_message(url)
         else:
             return self.send_telegram_message('Please specify query')

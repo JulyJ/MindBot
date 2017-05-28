@@ -35,15 +35,17 @@ class APODCommand(CommandBase):
             self.send_telegram_message('Error while processing the request.')
 
     def get_json(self):
-        apod_url = 'https://api.nasa.gov/planetary/apod?'
 
-        url = '{base}{query}'.format(
-            base=apod_url,
-            query=urlencode({'api_key': NASA_API_KEY}))
         try:
-            response = get(url)
+            response = get(self.form_url)
         except RequestException as e:
             self._logger.debug('RequestException {}'.format(e))
             return
         if response.status_code == status_codes.codes.ok:
             return response.json()
+
+    @property
+    def form_url(self):
+        return 'https://api.nasa.gov/planetary/apod?{query}'.format(
+            query=urlencode({'api_key': NASA_API_KEY})
+        )

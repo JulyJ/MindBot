@@ -38,10 +38,7 @@ class UrbanDictionaryCommand(SearchCommand):
             return self.send_telegram_message('Please specify query')
 
     def get_definition(self):
-        urban_url = 'http://api.urbandictionary.com/v0/define?'
-
-        url = '{base}{query}'.format(
-            base=urban_url,
+        url = 'http://api.urbandictionary.com/v0/define?{query}'.format(
             query=urlencode({'term': self._query})
         )
         self._logger.debug('Urban Dictionary API requested {url}'.format(url=url))

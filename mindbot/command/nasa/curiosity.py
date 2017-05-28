@@ -48,18 +48,20 @@ class CuriosityCommand(CommandBase):
             self.send_telegram_message('No photos loaded yet. Try the previous day.')
 
     def get_json(self):
-        curiosity_url = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?'
-        today = strftime("%Y-%m-%d", gmtime())
-        date = random_datetime(start='2012-08-06', stop=today)  # 2012-08-06  - landing date
-        url = '{base}{query}'.format(
-            base=curiosity_url,
-            query=urlencode({'api_key': NASA_API_KEY,
-                             'earth_date': date
-                             }))
         try:
-            response = get(url)
+            response = get(self.form_url)
         except RequestException as e:
             self._logger.debug('RequestException {}'.format(e))
             return
         if response.status_code == status_codes.codes.ok:
             return response.json()
+
+    @property
+    def form_url(self):
+        today = strftime("%Y-%m-%d", gmtime())
+        date = random_datetime(start='2012-08-06', stop=today)  # 2012-08-06  - landing date
+        return 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?{query}'.format(
+            query=urlencode({'api_key': NASA_API_KEY,
+                             'earth_date': date
+                             })
+        )

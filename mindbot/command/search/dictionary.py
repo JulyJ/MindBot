@@ -35,11 +35,8 @@ class DictionaryCommand(SearchCommand):
             self.send_telegram_message('Please specify query')
 
     def get_json(self):
-        urban_url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/'
-        url = '{base}{language}/{query}'.format(
-            base=urban_url,
-            query=self._query.lower(),
-            language='en')
+        url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/{query}'.format(
+            query=self._query.lower())
         self._logger.debug('Oxford Dictionary API requested {url}'.format(url=url))
         response = get(url, headers={'app_id': DICTIONARY_APP_ID,
                                      'app_key': DICTIONARY_APP_KEY})

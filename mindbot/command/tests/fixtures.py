@@ -244,3 +244,13 @@ def fake_ocr_error_response():
         "ErrorMessage": "null",
         "ErrorDetails": "null"
     }
+
+
+def fake_apod_message():
+    return {
+          "copyright": "ESA",
+          "date": "2017-05-28",
+          "explanation": "What's happened in Hebes Chasma on Mars?",
+          "title": "Collapse in Hebes Chasma on Mars",
+          "url": "https://apod.nasa.gov/apod/image/1705/HebesChasma_esa_960.jpg"
+        }

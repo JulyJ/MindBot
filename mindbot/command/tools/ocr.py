@@ -11,8 +11,6 @@
         /ocr http://fabricjs.com/article_assets/2_7.png
 """
 
-from typing import Tuple, Union
-
 from requests import post
 from validators import url as valid_url
 
