@@ -23,7 +23,6 @@ class APODCommand(CommandBase):
     APOD_TEXT = (
         '[{response[title]}]({response[url]})\n'
         '{response[explanation]}\n'
-        '_Copyright: {response[copyright]}_'
     )
 
     def __call__(self, *args, **kwargs):

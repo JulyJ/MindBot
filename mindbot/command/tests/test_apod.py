@@ -12,7 +12,6 @@ APOD_TEXT = (
         '[Collapse in Hebes Chasma on Mars]'
         '(https://apod.nasa.gov/apod/image/1705/HebesChasma_esa_960.jpg)\n'
         'What\'s happened in Hebes Chasma on Mars?\n'
-        '_Copyright: ESA_'
     )
 
 
