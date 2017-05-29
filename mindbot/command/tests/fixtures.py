@@ -230,6 +230,7 @@ def fake_ocr_response():
     }
 
 
+@pytest.fixture()
 def fake_ocr_error_response():
     return {
         "ParsedResults": [
@@ -246,6 +247,7 @@ def fake_ocr_error_response():
     }
 
 
+@pytest.fixture()
 def fake_apod_message():
     return {
           "copyright": "ESA",
@@ -254,3 +256,25 @@ def fake_apod_message():
           "title": "Collapse in Hebes Chasma on Mars",
           "url": "https://apod.nasa.gov/apod/image/1705/HebesChasma_esa_960.jpg"
         }
+
+
+@pytest.fixture()
+def fake_canadanews_article():
+    return {
+                "date": "May 29, 2017",
+                "photo": "/dai-quo/ssi/homepage/release_photo/946.jpg",
+                "title": "Study: Women in Canada: Women with Disabilities",
+                "summary": "Over 2 million women aged 15 or older.",
+                "link": "/daily-quotidien/170529/dq170529a-eng.htm"
+            }
+
+
+@pytest.fixture()
+def fake_canadanews():
+    return {
+        "daily": {
+            "article": [
+                fake_canadanews_article()
+            ]
+        }
+    }
