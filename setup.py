@@ -1,11 +1,8 @@
 from os import path
-from sys import exit
 from uuid import uuid1
 
 from pip.req import parse_requirements
 from setuptools import setup, find_packages
-from setuptools.command.test import test
-
 
 basedir = path.dirname(__file__)
 
