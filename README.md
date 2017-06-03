@@ -1,3 +1,6 @@
+[![Coverage Status](https://coveralls.io/repos/github/JulyJ/MindBot/badge.svg?branch=master)](https://coveralls.io/github/JulyJ/MindBot?branch=master)
+[![Build Status](https://travis-ci.org/JulyJ/MindBot.svg?branch=master)](https://travis-ci.org/JulyJ/MindBot)
+
 ## MindBot
 
 This repo contains source code for Telegram @MindDumpBot.
