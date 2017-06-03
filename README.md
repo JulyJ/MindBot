@@ -5,7 +5,7 @@
 
 This repo contains source code for Telegram @MindDumpBot.
 
-For beginning you can install bot with pip manager:
+You can install bot with pip installer:
 
 ```
 $ git clone https://github.com/JulyJ/MindBot
@@ -14,8 +14,7 @@ $ pip install -e .
 
 You must add environment variables:
 
-Short sample *.env* file
-
+Short sample of *.env* file
 ```
 # http://openweathermap.org/appid
 WEATHER_TOKEN="<TOKEN>"
@@ -28,7 +27,7 @@ DICTIONARY_APP_KEY="<APP_KEY>"
 OCR_API_KEY="<API_KEY>"
 ```
 
-To run bot you need just type to console
+Run your bot:
 
 ```
 mindbot
