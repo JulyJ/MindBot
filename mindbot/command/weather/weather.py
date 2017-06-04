@@ -63,4 +63,4 @@ class WeatherCommand(CommandBase):
                 self.prefix = self.get_emoji(weather) + ' ' + self.prefix
                 return self.send_telegram_message(text=text)
         else:
-            return self.send_telegram_message('Please pecify location')
+            return self.send_telegram_message('Please specify location')

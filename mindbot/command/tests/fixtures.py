@@ -1,4 +1,5 @@
 import pytest
+from time import gmtime, strftime
 
 from mindbot.router import CommandRouter
 
@@ -277,4 +278,37 @@ def fake_canadanews():
                 fake_canadanews_article()
             ]
         }
+    }
+
+
+@pytest.fixture()
+def fake_asteroid_message():
+    return {
+        "near_earth_objects": {
+            strftime("%Y-%m-%d", gmtime()): [{
+                'name': 'test',
+                'nasa_jpl_url': 'http://test.url',
+                'absolute_magnitude_h': 1234.43,
+                'estimated_diameter': {
+                    'kilometers': {
+                        'estimated_diameter_min': 12,
+                        'estimated_diameter_max': 24
+                    }
+                },
+                'is_potentially_hazardous_asteroid': True
+            }]
+        }
+    }
+
+
+@pytest.fixture()
+def fake_curiosity_message():
+    return {
+        'photos': [{
+            'earth_date': '2017-04-05',
+            'img_src': 'http://test.src',
+            'camera': {
+                'full_name': 'camera'
+            }
+        }]
     }

@@ -24,14 +24,16 @@ class RememberAll(CommandBase):
 
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
+        if not self._query:
+            return self.send_telegram_message('Please specify message to remember.')
         with self._database as db:
             db.add_message(
-                text=self._message['text'],
+                text=self._query,
                 date=self.date,
                 sender=self.sender,
-                tags=parse_tags(self._message['text']),
+                tags=parse_tags(self._query),
             )
-        self.send_telegram_message(self._message['text'])
+        self.send_telegram_message(self._query)
 
     @property
     def sender(self):

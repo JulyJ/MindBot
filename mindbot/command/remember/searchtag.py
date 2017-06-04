@@ -22,10 +22,10 @@ class SearchTagCommand(SearchCommand):
     def __call__(self, *args, **kwargs):
         super().__call__(*args, **kwargs)
         if not self._query:
-            return self.send_telegram_message('Please pecify #tags')
-        tags = parse_tags(self._message['text'])
+            return self.send_telegram_message('Please specify #tags')
+        tags = parse_tags(self._query)
         if not tags:
-            return self.send_telegram_message('Please pecify #tags')
+            return self.send_telegram_message('Please specify #tags')
         with self._database as db:
             for tag in tags:
                 messages = db.search_messages(tag)
